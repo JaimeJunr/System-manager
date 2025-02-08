@@ -14,7 +14,7 @@ from rich.prompt import Prompt
 from pynput import keyboard
 
 # Variáveis globais para a navegação e controle
-current_tab = 0
+selected_tab = 0
 monitoring = True  # Variável para controlar se o monitoramento está ativo
 console = Console()
 
@@ -134,12 +134,12 @@ def draw_interface():
 
     # Menu de navegação com destaque na aba selecionada
     menu_text = Text("[{}] Sistema  [{}] Memória  [{}] CPU  [{}] Disco  [{}] Rede  [{}] Temperatura".format(
-        '*' if current_tab == 0 else ' ',
-        '*' if current_tab == 1 else ' ',
-        '*' if current_tab == 2 else ' ',
-        '*' if current_tab == 3 else ' ',
-        '*' if current_tab == 4 else ' ',
-        '*' if current_tab == 5 else ' '
+        '*' if selected_tab == 0 else ' ',
+        '*' if selected_tab == 1 else ' ',
+        '*' if selected_tab == 2 else ' ',
+        '*' if selected_tab == 3 else ' ',
+        '*' if selected_tab == 4 else ' ',
+        '*' if selected_tab == 5 else ' '
     ))
     layout.split_column(
         Layout(Panel(menu_text, title="Menu")),
@@ -148,17 +148,17 @@ def draw_interface():
 
 
     # Renderiza o painel de acordo com a aba selecionada
-    if current_tab == 0:
+    if selected_tab == 0:
         layout["content"].update(Panel(get_system_info(), title="Sistema"))
-    elif current_tab == 1:
+    elif selected_tab == 1:
         layout["content"].update(Panel(get_memory_info(), title="Memória"))
-    elif current_tab == 2:
+    elif selected_tab == 2:
         layout["content"].update(Panel(get_cpu_info(), title="CPU"))
-    elif current_tab == 3:
+    elif selected_tab == 3:
         layout["content"].update(Panel(get_disk_info(), title="Disco"))
-    elif current_tab == 4:
+    elif selected_tab == 4:
         layout["content"].update(Panel(get_network_info(), title="Rede"))
-    elif current_tab == 5:
+    elif selected_tab == 5:
         layout["content"].update(Panel(get_temperature_info(), title="Temperatura"))
 
     return layout
@@ -176,12 +176,12 @@ def display_help():
 
 def on_press(key):
     """Lida com os eventos de teclas para navegação e controle do monitoramento."""
-    global current_tab, monitoring
+    global selected_tab, monitoring
     try:
         if key == keyboard.Key.right:
-            current_tab = (current_tab + 1) % 6  # Atualizado para 6 abas
+            selected_tab = (selected_tab + 1) % 6  # Atualizado para 6 abas
         elif key == keyboard.Key.left:
-            current_tab = (current_tab - 1) % 6  # Atualizado para 6 abas
+            selected_tab = (selected_tab - 1) % 6  # Atualizado para 6 abas
         elif key == keyboard.Key.esc:
             console.log("Saindo do monitoramento...")
             return False
